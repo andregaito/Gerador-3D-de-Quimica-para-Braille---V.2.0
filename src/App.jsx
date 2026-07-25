@@ -384,8 +384,9 @@ export default function App() {
     parseBraille(novaFormula);
   };
 
-  const parseBraille = (rawText) => {
-    if (!rawText.trim()) { setCells([]); return []; }
+  // aplicarNaTela=false converte sem tocar no preview: a aba Blocos Iônicos só quer as celas do próprio bloco.
+  const parseBraille = (rawText, aplicarNaTela = true) => {
+    if (!rawText.trim()) { if (aplicarNaTela) setCells([]); return []; }
     
     const subscriptMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
     const text = rawText.replace(/[₀-₉]/g, char => subscriptMap[char]);
@@ -432,7 +433,7 @@ export default function App() {
       }
     }
     
-    setCells(result); 
+    if (aplicarNaTela) setCells(result);
     return result;
   };
 
@@ -460,7 +461,7 @@ export default function App() {
     await new Promise(resolve => setTimeout(resolve, 50));
 
     try {
-      const brailleGerado = ionConfig.incluirBraille ? parseBraille(ionConfig.formula) : [];
+      const brailleGerado = ionConfig.incluirBraille ? parseBraille(ionConfig.formula, false) : [];
       const modeloIon = geradorBlocoIonicoJSCAD({ ...ionConfig, cellsBraille: brailleGerado });
       setIonStlUrl(gerarUrlSTL(modeloIon));
     } catch (error) { console.error("Erro no bloco iônico:", error); alert("Ocorreu um erro ao modelar o bloco iônico."); }
