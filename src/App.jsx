@@ -379,9 +379,13 @@ export default function App() {
 
   const sugestaoQuimica = checarSugestaoQuimica(input);
 
+  // Fórmula mudou sem novo clique em "Visualizar STL": invalida o modelo antigo e libera a URL da memória.
+  const invalidarStl = () => { if (stlUrl) { URL.revokeObjectURL(stlUrl); setStlUrl(null); } };
+
   const handleAplicarSugestao = (novaFormula) => {
     setInput(novaFormula);
     parseBraille(novaFormula);
+    invalidarStl();
   };
 
   const parseBraille = (rawText) => {
@@ -465,6 +469,12 @@ export default function App() {
       setIonStlUrl(gerarUrlSTL(modeloIon));
     } catch (error) { console.error("Erro no bloco iônico:", error); alert("Ocorreu um erro ao modelar o bloco iônico."); }
     finally { setIsGeneratingIon(false); }
+  };
+
+  // Fórmula do íon mudou sem novo clique em "Visualizar STL": invalida o modelo antigo e libera a URL da memória.
+  const handleFormulaIonChange = (novaFormula) => {
+    if (ionStlUrl) { URL.revokeObjectURL(ionStlUrl); setIonStlUrl(null); }
+    setIonConfig(prev => ({ ...prev, formula: novaFormula }));
   };
 
   const handleDownload = (urlAlvo, nomeAba = "MatrizBraille") => {
@@ -571,7 +581,7 @@ export default function App() {
     const recognition = new SpeechRecognition();
     recognition.lang = 'pt-BR'; recognition.interimResults = false;
     recognition.onstart = () => setIsListening(true);
-    recognition.onresult = (event) => { const transcript = event.results[0][0].transcript; const newText = input ? `${input} ${transcript}` : transcript; setInput(newText); parseBraille(newText); };
+    recognition.onresult = (event) => { const transcript = event.results[0][0].transcript; const newText = input ? `${input} ${transcript}` : transcript; setInput(newText); parseBraille(newText); invalidarStl(); };
     recognition.onerror = () => setIsListening(false);
     recognition.onend = () => setIsListening(false);
     recognition.start();
@@ -652,7 +662,7 @@ export default function App() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1 relative">
                     <label htmlFor="ionInput" className="block text-sm font-medium text-slate-700 mb-1">Digite a fórmula do Íon, Composto Químico ou Texto</label>
-                    <textarea id="ionInput" value={input} onChange={(e) => { setInput(e.target.value); parseBraille(e.target.value); }} className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 outline-none text-lg font-mono resize-y min-h-[80px] pr-12 transition-colors duration-500" style={{ backgroundColor: theme.fundoSubCaixa, color: theme.textoSubCaixa }} rows={2} placeholder="Ex: Fe(OH)2 ou qualquer texto multilinhas..." />
+                    <textarea id="ionInput" value={input} onChange={(e) => { setInput(e.target.value); parseBraille(e.target.value); invalidarStl(); }} className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 outline-none text-lg font-mono resize-y min-h-[80px] pr-12 transition-colors duration-500" style={{ backgroundColor: theme.fundoSubCaixa, color: theme.textoSubCaixa }} rows={2} placeholder="Ex: Fe(OH)2 ou qualquer texto multilinhas..." />
                     <button type="button" onClick={handleDictation} title="Ditar por voz" className={`absolute bottom-3 right-3 p-2 rounded-full transition-all duration-300 ${isListening ? 'bg-red-100 text-red-600 animate-pulse ring-2 ring-red-400' : 'bg-white/50 text-slate-500 hover:text-slate-800 backdrop-blur'}`}>
                       {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
                     </button>
@@ -849,7 +859,7 @@ export default function App() {
                     <label className="block text-sm font-bold text-slate-700 mb-1">2. Fórmula Química do Íon</label>
                     <input
                       type="text" value={ionConfig.formula}
-                      onChange={(e) => setIonConfig({ ...ionConfig, formula: e.target.value })}
+                      onChange={(e) => handleFormulaIonChange(e.target.value)}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 outline-none text-xl font-mono"
                       style={{ backgroundColor: theme.fundoSubCaixa, color: theme.textoSubCaixa }}
                       placeholder="Ex: H⁺ ou Ca²⁺"
