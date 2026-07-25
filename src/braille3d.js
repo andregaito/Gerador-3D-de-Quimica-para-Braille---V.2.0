@@ -140,7 +140,8 @@ export function geradorBlocoIonicoJSCAD(params) {
     for (let i = 0; i < str.length; i++) {
       let char = str[i];
       let isSub = /[₀-₉]/.test(char);
-      let isSup = /[⁺⁻⁰⁻⁹]/.test(char) || (i === str.length - 1 && /[+-]/.test(char));
+      // Lista todos os sobrescritos: dentro de [] o ⁻ (U+207B) é literal e não cria intervalo, então /[⁺⁻⁰⁻⁹]/ só pegava ⁺ ⁻ ⁰ ⁹.
+      let isSup = /[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]/.test(char) || (i === str.length - 1 && /[+-]/.test(char));
       let escala = (isSub || isSup) ? escalaPequena : escalaNormal;
       let yOffset = isSub ? -3.0 : (isSup ? 4.0 : 0);
 
