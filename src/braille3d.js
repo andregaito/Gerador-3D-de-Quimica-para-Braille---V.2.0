@@ -252,11 +252,17 @@ export function geradorBlocoIonicoJSCAD(params) {
   return malhaFinal;
 }
 
+// Monta a object URL a partir dos dados STL já serializados (é assim que o worker devolve)
+export function criarUrlSTL(dadosSTL) {
+  if (!dadosSTL) return null;
+  const blob = new Blob(dadosSTL, { type: 'model/stl' });
+  return URL.createObjectURL(blob);
+}
+
 export function gerarUrlSTL(modelo3D) {
   if (!modelo3D) return null;
   const stlDados = serialize({ binary: true }, modelo3D);
-  const blob = new Blob(stlDados, { type: 'model/stl' });
-  return URL.createObjectURL(blob);
+  return criarUrlSTL(stlDados);
 }
 
 export function baixarArquivoSTL(url, nomeArquivo = 'formula_braille.stl') {
