@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Suspense, useMemo } from 'react';
 import { Settings, ArrowRight, Download, Box, Copy, Check, Grip, Languages, Trash2, Mail, GraduationCap, Mic, MicOff, Volume2, Bug, User, Sliders, ChevronDown, ChevronUp, Handshake, Palette, Info, Heart, Layers, Eye, EyeOff } from 'lucide-react';
 import { gerarModeloJSCAD, geradorBlocoIonicoJSCAD, gerarUrlSTL, baixarArquivoSTL } from './braille3d';
+import { corrigirFormula } from './quimica/corretor';
 
 import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
@@ -252,6 +253,14 @@ const checarSugestaoQuimica = (texto) => {
   const limpo = texto.trim();
   if (!limpo || limpo.length < 2 || limpo.includes(' ')) return null;
 
+  // NOVO: primeiro as regras de química (eletroneutralidade + caixa do símbolo).
+  // Elas montam a fórmula certa em vez de procurar a errada numa lista, então
+  // cobrem a tabela periódica inteira sem ninguém precisar cadastrar nada.
+  // Se as regras não tiverem o que dizer, o dicionário escrito à mão continua
+  // logo abaixo, intacto, como rede de segurança.
+  const porRegra = corrigirFormula(limpo);
+  if (porRegra) return porRegra;
+
   const noxElementos = {
     'H': ['H+', 'H-'], 'Li': ['Li+'], 'Na': ['Na+'], 'K': ['K+'], 'Rb': ['Rb+'], 'Cs': ['Cs+'],
     'Be': ['Be2+'], 'Mg': ['Mg2+'], 'Ca': ['Ca2+'], 'Sr': ['Sr2+'], 'Ba': ['Ba2+'],
@@ -377,7 +386,9 @@ export default function App() {
     }
   }, [corPrincipal, ionConfig.tipo]);
 
-  const sugestaoQuimica = checarSugestaoQuimica(input);
+  // Só refaz a conta quando o texto muda: a checagem agora percorre a tabela de
+  // íons e roda a cada tecla, não precisa repetir a cada render da tela.
+  const sugestaoQuimica = useMemo(() => checarSugestaoQuimica(input), [input]);
 
   const handleAplicarSugestao = (novaFormula) => {
     setInput(novaFormula);
