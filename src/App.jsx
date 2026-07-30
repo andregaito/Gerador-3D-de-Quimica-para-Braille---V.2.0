@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, useMemo } from 'react';
 import { Settings, ArrowRight, Download, Box, Copy, Check, Grip, Languages, Trash2, Mail, GraduationCap, Mic, MicOff, Volume2, Bug, User, Sliders, ChevronDown, ChevronUp, Handshake, Palette, Info, Heart, Layers, Eye, EyeOff } from 'lucide-react';
-import { gerarModeloJSCAD, geradorBlocoIonicoJSCAD, gerarUrlSTL, baixarArquivoSTL } from './braille3d';
+import { criarUrlSTL, baixarArquivoSTL } from './braille3d';
 
 import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
@@ -322,6 +322,26 @@ const AlertaSugestao = ({ sugestaoDados, aoAplicarSugestao }) => {
   );
 };
 
+// Manda o cálculo da malha para o worker e espera os dados do STL.
+// Um worker por geração: ao terminar ele é encerrado, sem sobra de mensagem antiga.
+function gerarSTLNoWorker(mensagem) {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker(new URL('./stlWorker.js', import.meta.url), { type: 'module' });
+
+    worker.onmessage = (evento) => {
+      worker.terminate();
+      if (evento.data.erro) reject(new Error(evento.data.erro));
+      else resolve(evento.data.dadosSTL);
+    };
+    worker.onerror = (evento) => {
+      worker.terminate();
+      reject(new Error(evento.message || 'Falha no worker do STL'));
+    };
+
+    worker.postMessage(mensagem);
+  });
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('gerador');
   const [corPrincipal, setCorPrincipal] = useState('#0e52c2'); 
@@ -370,6 +390,18 @@ export default function App() {
   const [dimensoesIonico, setDimensoesIonico] = useState(null);
   const [mostrarDimensoesIonico, setMostrarDimensoesIonico] = useState(true);
   const [showDimensoesFisicasIonico, setShowDimensoesFisicasIonico] = useState(true);
+
+  // Cada STL pesa ~1,7 MB e o navegador segura o arquivo na memória até alguém revogar.
+  // Aqui a URL antiga é liberada ao gerar um modelo novo e ao sair da página.
+  useEffect(() => {
+    if (!stlUrl) return;
+    return () => URL.revokeObjectURL(stlUrl);
+  }, [stlUrl]);
+
+  useEffect(() => {
+    if (!ionStlUrl) return;
+    return () => URL.revokeObjectURL(ionStlUrl);
+  }, [ionStlUrl]);
 
   useEffect(() => {
     if (!ionConfig.corCustomizada) {
@@ -447,8 +479,8 @@ export default function App() {
     await new Promise(resolve => setTimeout(resolve, 50));
 
     try {
-      const modelo3D = gerarModeloJSCAD(blocosGerados, config3D);
-      const url = gerarUrlSTL(modelo3D);
+      const dadosSTL = await gerarSTLNoWorker({ tipo: 'braille', cells: blocosGerados, config: config3D });
+      const url = criarUrlSTL(dadosSTL);
       setStlUrl(url); 
     } catch (error) { console.error("Erro ao gerar modelo:", error); alert("Ocorreu um erro ao gerar a malha 3D."); }
     finally { setIsGenerating(false); }
@@ -461,8 +493,8 @@ export default function App() {
 
     try {
       const brailleGerado = ionConfig.incluirBraille ? parseBraille(ionConfig.formula) : [];
-      const modeloIon = geradorBlocoIonicoJSCAD({ ...ionConfig, cellsBraille: brailleGerado });
-      setIonStlUrl(gerarUrlSTL(modeloIon));
+      const dadosSTL = await gerarSTLNoWorker({ tipo: 'ionico', params: { ...ionConfig, cellsBraille: brailleGerado } });
+      setIonStlUrl(criarUrlSTL(dadosSTL));
     } catch (error) { console.error("Erro no bloco iônico:", error); alert("Ocorreu um erro ao modelar o bloco iônico."); }
     finally { setIsGeneratingIon(false); }
   };
