@@ -221,11 +221,11 @@ const ColorTester = ({ corPrincipal, setCorPrincipal }) => {
 
   return (
     <div className="relative flex items-center space-x-2 bg-white/95 backdrop-blur px-3 py-1.5 rounded-full border shadow-sm flex-shrink-0 z-10 transition-colors duration-500" style={{ borderColor: `${corPrincipal}40` }}>
-      <button type="button" onClick={() => { setCorPrincipal(isRoxo ? '#0e52c2' : '#511576'); setMenuAberto(false); }} className="w-11 h-6 rounded-full p-0.5 transition-colors duration-300 relative focus:outline-none cursor-pointer flex-shrink-0" style={{ backgroundColor: isRoxo ? '#511576' : '#0e52c2' }}>
+      <button type="button" onClick={() => { setCorPrincipal(isRoxo ? '#0e52c2' : '#511576'); setMenuAberto(false); }} aria-label={isRoxo ? "Alternar cor principal para azul" : "Alternar cor principal para roxo"} className="w-11 h-6 rounded-full p-0.5 transition-colors duration-300 relative focus:outline-none cursor-pointer flex-shrink-0" style={{ backgroundColor: isRoxo ? '#511576' : '#0e52c2' }}>
         <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${isRoxo ? 'translate-x-5' : 'translate-x-0'}`} />
       </button>
       <div className="relative">
-        <button onClick={() => setMenuAberto(!menuAberto)} className="cursor-pointer text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center p-1">
+        <button onClick={() => setMenuAberto(!menuAberto)} aria-label="Abrir paleta de cores" className="cursor-pointer text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center p-1">
           <Palette className="w-5 h-5 transition-colors" style={{ color: (!isRoxo && corPrincipal !== '#0e52c2') ? corPrincipal : undefined }} />
         </button>
         {menuAberto && (
@@ -592,6 +592,9 @@ export default function App() {
   return (
     <div className="flex flex-col min-h-screen font-sans text-slate-800 transition-colors duration-500" style={{ backgroundColor: theme.fundoPrincipal }}>
       
+      {/* Só aparece quando recebe foco pelo teclado, não muda nada pra quem usa mouse */}
+      <a href="#conteudo-principal" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-md focus:shadow-lg focus:font-semibold">Pular para o conteúdo principal</a>
+
       <header className="pt-6 pb-6 sm:pt-10 sm:pb-8 px-4 sm:px-6 z-10 relative transition-colors duration-500 shadow-sm" style={{ backgroundColor: theme.cabecalho }}>
         <div className="max-w-5xl mx-auto flex flex-row items-center justify-start gap-3 sm:gap-6">
           <img src={theme.logo || logoPrincipal} alt="Logo" className="w-16 h-16 sm:w-28 sm:h-28 md:w-36 md:h-36 object-contain drop-shadow-sm flex-shrink-0 transition-all duration-300" />
@@ -626,7 +629,7 @@ export default function App() {
         </div>
       </nav>
 
-      <main className="flex-grow p-4 sm:p-6 w-full max-w-5xl mx-auto">
+      <main id="conteudo-principal" className="flex-grow p-4 sm:p-6 w-full max-w-5xl mx-auto">
         
         {/* ========================================================================= */}
         {/* ABA: GERADOR BRAILLE ORIGINAL */}
@@ -668,7 +671,7 @@ export default function App() {
                 <AlertaSugestao sugestaoDados={sugestaoQuimica} aoAplicarSugestao={handleAplicarSugestao} />
 
                 <div className="border-t border-slate-200 pt-4 mt-2">
-                  <button type="button" onClick={() => setShowAdvanced(!showAdvanced)} className="flex items-center text-sm font-semibold hover:opacity-80 transition-opacity" style={{ color: theme.corPrincipal }}>
+                  <button type="button" onClick={() => setShowAdvanced(!showAdvanced)} aria-expanded={showAdvanced} aria-controls="painel-avancado" className="flex items-center text-sm font-semibold hover:opacity-80 transition-opacity" style={{ color: theme.corPrincipal }}>
                     <Sliders className="w-4 h-4 mr-2" /> Opções Avançadas de Impressão 3D {showAdvanced ? <ChevronUp className="w-4 h-4 ml-1" /> : <ChevronDown className="w-4 h-4 ml-1" />}
                   </button>
                   {showAdvanced && (
@@ -688,7 +691,7 @@ export default function App() {
             </div>
 
             {stlUrl && (
-              <div role="region" className="p-6 rounded-xl shadow-sm transition-colors duration-500 flex flex-col" style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}>
+              <div role="region" aria-label="Pré-visualização do Modelo 3D" className="p-6 rounded-xl shadow-sm transition-colors duration-500 flex flex-col" style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}>
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex items-center gap-3">
                     <h2 className="text-lg font-bold text-slate-800 flex items-center"><Box className="w-5 h-5 mr-2 text-slate-500" />Pré-visualização do Modelo 3D</h2>
@@ -703,24 +706,27 @@ export default function App() {
                 
                 <p className="sr-only text-justify">Modelo 3D gerado. Arquivo possui aproximadamente {celasFisicas.length} celas braille.</p>
 
-                <div aria-hidden="true" className="w-full h-[350px] bg-slate-900 rounded-lg overflow-hidden relative cursor-move" onDoubleClick={() => setMostrarDimensoesGerador(!mostrarDimensoesGerador)}>
+                <div className="w-full h-[350px] bg-slate-900 rounded-lg overflow-hidden relative cursor-move" onDoubleClick={() => setMostrarDimensoesGerador(!mostrarDimensoesGerador)}>
                   
                   <DimensionsOverlay dimensions={dimensoesGerador} isVisible={mostrarDimensoesGerador} />
 
-                  <button onClick={() => setAutoRotate(!autoRotate)} className="absolute top-4 right-4 z-10 p-1 rounded-full shadow-lg transition-all" style={autoRotate ? { backgroundColor: theme.corPrincipal, border: `2px solid ${theme.corPrincipal}` } : { backgroundColor: 'rgba(51, 65, 85, 0.8)' }}>
+                  <button onClick={() => setAutoRotate(!autoRotate)} aria-label={autoRotate ? "Parar rotação automática do modelo 3D" : "Ativar rotação automática do modelo 3D"} className="absolute top-4 right-4 z-10 p-1 rounded-full shadow-lg transition-all" style={autoRotate ? { backgroundColor: theme.corPrincipal, border: `2px solid ${theme.corPrincipal}` } : { backgroundColor: 'rgba(51, 65, 85, 0.8)' }}>
                     <img src={iconeRotacao} alt="" className="w-12 h-12 rounded-full object-cover" />
                   </button>
 
-                  <Canvas shadows camera={{ position: [0, 50, 100], fov: 45 }}>
-                    <Suspense fallback={null}>
-                      <Environment preset="city" /><ambientLight intensity={0.5} /><directionalLight position={[10, 20, 10]} intensity={1.5} castShadow />
-                      <Bounds fit clip observe margin={1.2}>
-                        <StlModel url={stlUrl} cor={theme.corPrincipal} onDimensionsParsed={setDimensoesGerador} />
-                      </Bounds>
-                    </Suspense>
-                    <axesHelper args={[30]} /><gridHelper args={[200, 20, '#94a3b8', '#475569']} position={[0, 0, 0]} />
-                    <OrbitControls autoRotate={autoRotate} autoRotateSpeed={2.0} makeDefault enablePan={true} enableZoom={true} />
-                  </Canvas>
+                  {/* aria-hidden só aqui dentro: WebGL não tem o que expor pro leitor de tela, e assim o botão de cima fica de fora e continua anunciado */}
+                  <div aria-hidden="true" className="w-full h-full">
+                    <Canvas shadows camera={{ position: [0, 50, 100], fov: 45 }}>
+                      <Suspense fallback={null}>
+                        <Environment preset="city" /><ambientLight intensity={0.5} /><directionalLight position={[10, 20, 10]} intensity={1.5} castShadow />
+                        <Bounds fit clip observe margin={1.2}>
+                          <StlModel url={stlUrl} cor={theme.corPrincipal} onDimensionsParsed={setDimensoesGerador} />
+                        </Bounds>
+                      </Suspense>
+                      <axesHelper args={[30]} /><gridHelper args={[200, 20, '#94a3b8', '#475569']} position={[0, 0, 0]} />
+                      <OrbitControls autoRotate={autoRotate} autoRotateSpeed={2.0} makeDefault enablePan={true} enableZoom={true} />
+                    </Canvas>
+                  </div>
                   
                   <p className="absolute bottom-3 left-0 w-full text-center text-xs text-slate-300 font-medium pointer-events-none drop-shadow-md">Arraste para girar • Role para aproximar • 2 cliques para ocultar dimensões</p>
                 </div>
@@ -881,12 +887,12 @@ export default function App() {
 
                 {/* 3. Dimensões do Bloco e Encaixes (MINIMIZÁVEL) */}
                 <div className="pt-4 border-t border-slate-200">
-                  <button type="button" onClick={() => setShowDimensoesFisicasIonico(!showDimensoesFisicasIonico)} className="flex items-center text-sm font-semibold hover:opacity-80 transition-opacity uppercase tracking-wide mb-3" style={{ color: theme.corPrincipal }}>
+                  <button type="button" onClick={() => setShowDimensoesFisicasIonico(!showDimensoesFisicasIonico)} aria-expanded={showDimensoesFisicasIonico} aria-controls="painel-dimensoes-fisicas-ionico" className="flex items-center text-sm font-semibold hover:opacity-80 transition-opacity uppercase tracking-wide mb-3" style={{ color: theme.corPrincipal }}>
                     <Sliders className="w-4 h-4 mr-2" /> 3. Dimensões Físicas {showDimensoesFisicasIonico ? <ChevronUp className="w-4 h-4 ml-1" /> : <ChevronDown className="w-4 h-4 ml-1" />}
                   </button>
                   
                   {showDimensoesFisicasIonico && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 bg-slate-50 p-4 rounded-lg border border-slate-200 shadow-sm animate-fadeIn">
+                    <div id="painel-dimensoes-fisicas-ionico" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 bg-slate-50 p-4 rounded-lg border border-slate-200 shadow-sm animate-fadeIn">
                       <ConfigSlider label="Largura da Base (X)" value={ionConfig.largura} min="30.0" max="100.0" step="0.5" unit="mm" onChange={(e) => setIonConfig({...ionConfig, largura: parseFloat(e.target.value)})} cor={theme.corPrincipal} />
                       <ConfigSlider label={`Altura da Base (Y)`} value={ionConfig.altura} min="15.0" max="50.0" step="0.5" unit="mm" onChange={(e) => setIonConfig({...ionConfig, altura: parseFloat(e.target.value)})} cor={theme.corPrincipal} />
                       <ConfigSlider label="Espessura da base (Z)" value={ionConfig.espessura} min="2.0" max="15.0" step="0.5" unit="mm" onChange={(e) => setIonConfig({...ionConfig, espessura: parseFloat(e.target.value)})} cor={theme.corPrincipal} />
