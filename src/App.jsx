@@ -139,6 +139,16 @@ const UPPER_INDICATOR = getU(BRAILLE_MAP.uppercaseIndicator);
 const NUMBER_INDICATOR = getU(BRAILLE_MAP.numberSign);
 const CHARGE_INDICATOR = getU(BRAILLE_MAP.chargeIndicator);
 
+// Desempate das celas ambíguas (⠜ é ã e ), ⠖ é + e 6...): decide olhando a PALAVRA inteira.
+// Fórmula química: cada elemento carrega o seu próprio ⠨, e carga/índice trazem ⠐ ou ⠼.
+// Palavra comum só tem ⠨ na primeira cela ("Mãe", "Ácido"), então a cela ambígua é letra acentuada.
+const ehPalavraDeFormula = (palavra) => {
+  if (palavra.includes(CHARGE_INDICATOR) || palavra.includes(NUMBER_INDICATOR)) return true;
+  if (palavra.slice(1).includes(UPPER_INDICATOR)) return true;
+  // Número solto de dois dígitos ou mais ("20") também é índice, não pontuação.
+  return palavra.length > 1 && [...palavra].every(c => REVERSE_LOW_NUM_MAP[c]);
+};
+
 const Dot = ({ active }) => (
   <div className={`w-2.5 h-2.5 sm:w-4 sm:h-4 rounded-full transition-colors duration-300 ${active ? 'bg-slate-800 shadow-sm' : 'bg-transparent border-[1.5px] sm:border-2 border-slate-200'}`} />
 );
@@ -513,6 +523,14 @@ export default function App() {
     let result = ''; let isUpper = false; let isNumber = false; let isCharge = false;
     const numMap = {'a':'1','b':'2','c':'3','d':'4','e':'5','f':'6','g':'7','h':'8','i':'9','j':'0'};
 
+    // Marca cela a cela se ela está dentro de uma palavra de fórmula. O split guarda os
+    // separadores, então as posições da marcação batem certinho com as do texto original.
+    const emFormula = [];
+    text.split(/([ ⠀\n])/).forEach(palavra => {
+      const formula = ehPalavraDeFormula(palavra);
+      for (let k = 0; k < palavra.length; k++) emFormula.push(formula);
+    });
+
     for (let i = 0; i < text.length; i++) {
       const char = text[i];
       if (char === ' ' || char === '⠀') { result += ' '; isNumber = false; isCharge = false; continue; }
@@ -525,32 +543,17 @@ export default function App() {
       const mappedSym = REVERSE_SYM_MAP[char];
       const mappedLowNum = REVERSE_LOW_NUM_MAP[char];
 
-      const prevChar = result.slice(-1);
-      const prevPrevChar = result.length > 1 ? result.slice(-2, -1) : ' ';
-      const isPrevLower = /[a-zçáàâãéêíóôõú]/.test(prevChar);
-      const isPrevPrevUpper = /[A-Z]/.test(prevPrevChar);
-      const isChemicalElement = isPrevLower && isPrevPrevUpper;
-
       if (mappedLetter && mappedSym) {
-        let useSymbol = true;
-        if (isUpper) { useSymbol = false; } else {
-          let nextBraille = text[i+1];
-          let nextIsLowerLetter = nextBraille && REVERSE_LETTER_MAP[nextBraille] && !REVERSE_SYM_MAP[nextBraille] && nextBraille !== UPPER_INDICATOR && nextBraille !== NUMBER_INDICATOR;
-          if (isPrevLower && !isChemicalElement && (nextIsLowerLetter || !nextBraille || nextBraille === ' ' || nextBraille === '\n' || REVERSE_SYM_MAP[nextBraille])) {
-            useSymbol = false;
-            if (mappedSym === '(' && nextBraille) {
-               let nL = REVERSE_LETTER_MAP[nextBraille];
-               if (nL === 's' || nL === 'l' || nL === 'g' || nL === 'a') useSymbol = true;
-            }
-          } else if ((prevChar === ' ' || prevChar === '') && nextIsLowerLetter) { useSymbol = false; }
-        }
+        // O ⠨ na frente já garante que é letra (Ácido); fora disso, só fórmula vira parêntese.
+        const useSymbol = !isUpper && emFormula[i];
         if (useSymbol) { result += mappedSym; } else { result += isUpper ? mappedLetter.toUpperCase() : mappedLetter; isUpper = false; }
         continue;
       }
 
       if (mappedLowNum && mappedSym) {
+        // Depois do ⠐ a cela é sempre o sinal da carga (+ ou -), venha o que vier.
         if (isCharge) { result += mappedSym; if (mappedSym === '+' || mappedSym === '-') isCharge = false; }
-        else { let useNumber = true; if ((isPrevLower && !isChemicalElement) || prevChar === ' ') useNumber = false; result += useNumber ? mappedLowNum : mappedSym; }
+        else { result += emFormula[i] ? mappedLowNum : mappedSym; }
         continue;
       }
 
