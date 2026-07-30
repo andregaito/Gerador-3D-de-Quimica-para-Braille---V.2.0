@@ -333,6 +333,9 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [stlUrl, setStlUrl] = useState(null);
   const [autoRotate, setAutoRotate] = useState(false);
+
+  // Mensagem da região viva pro leitor de tela. Compartilhada entre as abas Gerador e Blocos Iônicos.
+  const [liveMessage, setLiveMessage] = useState('');
   
   const [dimensoesGerador, setDimensoesGerador] = useState(null);
   const [mostrarDimensoesGerador, setMostrarDimensoesGerador] = useState(true);
@@ -444,12 +447,16 @@ export default function App() {
     if (!blocosGerados || blocosGerados.length === 0) return;
     
     setIsGenerating(true); setStlUrl(null); setDimensoesGerador(null);
+    setLiveMessage('Gerando modelo 3D, aguarde.');
+    // Esse delay dá tempo da tela (e do leitor de tela) atualizar antes do JSCAD travar a thread principal. Não remover.
     await new Promise(resolve => setTimeout(resolve, 50));
 
     try {
       const modelo3D = gerarModeloJSCAD(blocosGerados, config3D);
       const url = gerarUrlSTL(modelo3D);
       setStlUrl(url); 
+      const totalCelas = blocosGerados.filter(c => !c.isNewline).length;
+      setLiveMessage(`Modelo 3D pronto com ${totalCelas} cela${totalCelas === 1 ? '' : 's'} braille. Botão de baixar arquivo disponível.`);
     } catch (error) { console.error("Erro ao gerar modelo:", error); alert("Ocorreu um erro ao gerar a malha 3D."); }
     finally { setIsGenerating(false); }
   };
@@ -457,12 +464,15 @@ export default function App() {
   const handleGenerateIon = async (e) => {
     e.preventDefault();
     setIsGeneratingIon(true); setIonStlUrl(null); setDimensoesIonico(null);
+    setLiveMessage('Gerando bloco iônico 3D, aguarde.');
+    // Mesmo truque do handleGenerate: dá tempo da tela atualizar antes do JSCAD travar a thread. Não remover.
     await new Promise(resolve => setTimeout(resolve, 50));
 
     try {
       const brailleGerado = ionConfig.incluirBraille ? parseBraille(ionConfig.formula) : [];
       const modeloIon = geradorBlocoIonicoJSCAD({ ...ionConfig, cellsBraille: brailleGerado });
       setIonStlUrl(gerarUrlSTL(modeloIon));
+      setLiveMessage('Bloco iônico 3D pronto. Botão de baixar arquivo disponível.');
     } catch (error) { console.error("Erro no bloco iônico:", error); alert("Ocorreu um erro ao modelar o bloco iônico."); }
     finally { setIsGeneratingIon(false); }
   };
@@ -505,7 +515,7 @@ export default function App() {
     return String.fromCharCode(code);
   }).join('');
 
-  const handleCopy = () => { navigator.clipboard.writeText(brailleUnicodeText); setCopiado(true); setTimeout(() => setCopiado(false), 2000); };
+  const handleCopy = () => { navigator.clipboard.writeText(brailleUnicodeText); setCopiado(true); setLiveMessage('Texto braille copiado.'); setTimeout(() => setCopiado(false), 2000); };
   const handleCopyPix = () => { navigator.clipboard.writeText('andrevinniciosgaito@gmail.com'); setPixCopiado(true); setTimeout(() => setPixCopiado(false), 3000); };
 
   const handleBrailleTranslate = (text) => {
@@ -589,6 +599,17 @@ export default function App() {
 
   const celasFisicas = cells.filter(c => !c.isNewline);
 
+  // Anuncia a contagem de celas ~600ms depois que o usuário para de digitar.
+  // Debounce evita que o NVDA/JAWS fique falando a cada tecla e o usuário desista de ouvir.
+  useEffect(() => {
+    if (activeTab !== 'gerador') return;
+    const timer = setTimeout(() => {
+      const total = celasFisicas.length;
+      setLiveMessage(total > 0 ? `${total} cela${total === 1 ? '' : 's'} braille.` : '');
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [celasFisicas.length, activeTab]);
+
   return (
     <div className="flex flex-col min-h-screen font-sans text-slate-800 transition-colors duration-500" style={{ backgroundColor: theme.fundoPrincipal }}>
       
@@ -628,6 +649,9 @@ export default function App() {
 
       <main className="flex-grow p-4 sm:p-6 w-full max-w-5xl mx-auto">
         
+        {/* Região viva do leitor de tela: fica sempre montada aqui fora, antes de qualquer aba, senão a maioria dos leitores não anuncia a troca */}
+        <p role="status" className="sr-only">{liveMessage}</p>
+
         {/* ========================================================================= */}
         {/* ABA: GERADOR BRAILLE ORIGINAL */}
         {/* ========================================================================= */}
