@@ -467,6 +467,32 @@ export default function App() {
     finally { setIsGeneratingIon(false); }
   };
 
+  // Transliterar sobrescritos e subscritos para ASCII legível antes de sanitizar nome do arquivo.
+  const transliterarNomeArquivo = (nome) => {
+    const supMap = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁺': 'mais', '⁻': 'menos' };
+    const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+
+    let resultado = '';
+    let ultimoFoiSubscrito = false;
+
+    for (const char of nome) {
+      if (supMap[char]) {
+        if (ultimoFoiSubscrito) resultado += '_'; // Separa subscrito de sobrescrito.
+        resultado += supMap[char];
+        ultimoFoiSubscrito = false;
+      } else if (subMap[char]) {
+        resultado += subMap[char];
+        ultimoFoiSubscrito = true;
+      } else {
+        resultado += char;
+        ultimoFoiSubscrito = false;
+      }
+    }
+
+    // Sanitizar: remove caracteres não-alfanuméricos (exceto underscore).
+    return resultado.replace(/[^a-zA-Z0-9_]/g, '_');
+  };
+
   const handleDownload = (urlAlvo, nomeAba = "MatrizBraille") => {
     const alvo = urlAlvo || stlUrl;
     if (!alvo) return;
@@ -487,7 +513,7 @@ export default function App() {
       const blob = new Blob([stlString], { type: 'text/plain' });
       const downloadUrl = URL.createObjectURL(blob);
       
-      const nomeStr = (nomeAba === "BlocoIonico" ? ionConfig.formula : input).replace(/[^a-zA-Z0-9]/g, '_');
+      const nomeStr = transliterarNomeArquivo(nomeAba === "BlocoIonico" ? ionConfig.formula : input);
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = `${nomeAba}_${nomeStr}.stl`;
