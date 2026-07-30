@@ -45,6 +45,10 @@ const EQUIPE = [
 
 const CONTATOS_EMAILS = "andrevinniciosgaito@gmail.com,quimicaaoalcancedasmaos@gmail.com,FNCosta@IPPN.UFRJ.br";
 
+// LIMITE DA MESA DE IMPRESSÃO (em mm). Mesas de impressora 3D de escola costumam
+// medir entre 200 e 256mm. Passou disso, avisa o usuário. Troque o número aqui se precisar.
+const LARGURA_MAXIMA_IMPRESSORA_MM = 200;
+
 const GithubIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>;
 const InstagramIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>;
 const LinkedinIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>;
@@ -741,6 +745,15 @@ export default function App() {
                     <p>Largura estimada na impressão: <span className="font-bold text-slate-700">~{(celasFisicas.length * 6.5).toFixed(1)} mm</span></p>
                     <p>Total: <span className="font-bold text-slate-700">{celasFisicas.length}</span> celas</p>
                   </div>
+                  {(celasFisicas.length * 6.5) > LARGURA_MAXIMA_IMPRESSORA_MM && (
+                    <div role="alert" className="mt-3 bg-amber-50/90 border-l-4 border-amber-500 p-3 rounded-r-lg shadow-sm flex items-start space-x-3 text-left transition-all">
+                      <div className="p-1 bg-amber-500/10 rounded-full text-amber-600 flex-shrink-0 mt-0.5"><Info className="w-5 h-5" /></div>
+                      <div className="flex-1 text-xs sm:text-sm text-amber-900 leading-relaxed text-justify">
+                        <span className="font-semibold block text-amber-950 mb-0.5">Placa maior que a mesa de impressão:</span>
+                        A largura passou de {LARGURA_MAXIMA_IMPRESSORA_MM}mm, limite das impressoras 3D de escola. Quebre o texto em mais linhas (tecla Enter) antes de gerar o modelo 3D — o gerador já suporta várias linhas.
+                      </div>
+                    </div>
+                  )}
                   <div className="mt-6 flex flex-col md:flex-row gap-4">
                     <div className="md:w-1/2 border border-slate-200 rounded-lg p-4 bg-slate-50/50 flex flex-col justify-between transition-colors">
                       <div>
