@@ -10,13 +10,14 @@ const SaibaMaisTab = ({ theme, corPrincipal, setCorPrincipal }) => (
     style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}
   >
     {/* Cabeçalho da Aba */}
-    <div className="flex justify-between items-start border-b border-slate-200 pb-6">
-      <div>
+    <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-slate-200 pb-6">
+      <div className="flex-1">
         <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Novidades e Próximos Passos</h2>
-        <p className="text-lg font-medium mt-2 transition-colors text-justify" style={{ color: theme.corPrincipal }}>
+        <p className="text-lg font-medium mt-2 transition-colors text-justify pr-2" style={{ color: theme.corPrincipal }}>
           Acompanhe o desenvolvimento contínuo, nossas pesquisas e redes de colaboração institucional.
         </p>
       </div>
+      {/* Container do ColorTester alinhado exatamente como no GeradorBrailleTab */}
       <div className="flex-shrink-0 self-start">
         <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
       </div>
