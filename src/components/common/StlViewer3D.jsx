@@ -7,7 +7,7 @@ import iconeRotacao from '../../assets/icone-rotacao.svg';
 
 /**
  * Visualizador 3D interativo compartilhado pelas abas "Gerador Braille" e "Blocos Iônicos": 
- * renderiza o STL, o overlay de dimensões e o botão de auto-rotação, com câmera/altura configuráveis por peça
+ * renderiza o STL, o overlay de dimensões e o botão de auto-rotação, com câmera/altura configuráveis por peça.
  */
 const StlViewer3D = ({
   url, cor, dimensions, onDimensionsParsed, mostrarDimensoes, onToggleDimensoes,
@@ -28,13 +28,13 @@ const StlViewer3D = ({
         onClick={onToggleAutoRotate} 
         className="absolute top-4 right-4 z-10 p-1 rounded-full shadow-lg transition-all duration-300 hover:scale-105" 
         style={{ 
-          backgroundColor: autoRotate ? cor : 'rgba(51, 65, 85, 0.8)', // Cor preenchida se ativo, escuro se inativo
+          backgroundColor: autoRotate ? cor : 'transparent', // Fundo totalmente transparente quando inativo
           border: `2px solid ${cor}` 
         }}
         title={autoRotate ? "Parar rotação" : "Iniciar rotação"}
       >
         <div 
-          className="w-12 h-12 transition-all duration-500" // Tamanho original w-12 h-12
+          className="w-12 h-12 transition-all duration-500" 
           style={{ 
             backgroundColor: autoRotate ? '#ffffff' : cor, // Ícone branco se ativo, pintado com a paleta se inativo
             maskImage: `url(${iconeRotacao})`, 
