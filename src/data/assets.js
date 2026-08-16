@@ -29,6 +29,5 @@ export { default as fotoFernandaNeves } from '../assets/FotoMembro-FernandaNeves
 export { default as fotoHugoReis } from '../assets/FotoMembro-HugoReis.webp';
 export { default as fotoRaissaEcard } from '../assets/FotoMembro-RaissaEcard.webp';
 export { default as fotoPedroXavier } from '../assets/FotoMembro-PedroXavier.webp';
-export { default as fotoPedroXavier } from '../assets/FotoMembro-EduardaGoncalves.webp';
-export { default as fotoPedroXavier } from '../assets/FotoMembro-DavidFiocchi.webp';
-
+export { default as fotoEduardaGoncalves } from '../assets/FotoMembro-EduardaGoncalves.webp';
+export { default as fotoDavidFiocchi } from '../assets/FotoMembro-DavidFiocchi.webp';
