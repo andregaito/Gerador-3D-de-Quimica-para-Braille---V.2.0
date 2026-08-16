@@ -59,5 +59,3 @@ const ParceriasTab = ({ theme, corPrincipal, setCorPrincipal }) => {
 };
 
 export default ParceriasTab;
-
-export default ParceriasTab;
