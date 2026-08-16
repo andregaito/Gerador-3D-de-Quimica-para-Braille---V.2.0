@@ -56,33 +56,37 @@ export default function App() {
   const renderConteudoAba = () => {
     switch (activeTab) {
       case 'gerador':
-        return (
-          <GeradorBrailleTab
-            theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal}
-            autoRotate={autoRotate} setAutoRotate={setAutoRotate}
-            gerador={gerador}
-          />
+        return ( <GeradorBrailleTab theme={theme}  corPrincipal={corPrincipal}  setCorPrincipal={setCorPrincipal} autoRotate={autoRotate} setAutoRotate={setAutoRotate} gerador={gerador} />
         );
+        
       case 'ionicos':
-        return (
-          <BlocosIonicosTab
-            theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal}
-            autoRotate={autoRotate} setAutoRotate={setAutoRotate}
-            ionico={ionico}
-          />
+        return ( <BlocosIonicosTab theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} autoRotate={autoRotate} setAutoRotate={setAutoRotate} ionico={ionico} />
         );
+        
       case 'sobre':
-        return <SobreProjetoTab theme={theme} />;
+        return ( <SobreProjetoTab  theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
+        );
+        
       case 'instrucoes':
-        return <InstrucoesTab theme={theme} />;
+        return ( <InstrucoesTab  theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
+        );
+        
       case 'saiba-mais':
-        return <SaibaMaisTab theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />;
+        return ( <SaibaMaisTab theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
+        );
+        
       case 'parcerias':
-        return <ParceriasTab theme={theme} />;
+        return ( <ParceriasTab theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
+        );
+        
       case 'equipe':
-        return <EquipeTab theme={theme} />;
+        return ( <EquipeTab theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
+        );
+        
       case 'bug':
-        return <BugTab theme={theme} />;
+        return ( <BugTab theme={theme} corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
+        );
+        
       default:
         return null;
     }
