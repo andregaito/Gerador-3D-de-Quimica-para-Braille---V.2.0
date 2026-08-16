@@ -4,7 +4,9 @@ import {
   fotoFernandaNeves,
   fotoHugoReis,
   fotoRaissaEcard,
-  fotoPedroXavier
+  fotoPedroXavier,
+  fotoEduardaGoncalves,
+  fotoDavidFiocchi
 } from './assets';
 
 // Para editar a equipe do projeto (aba "Equipe"), basta alterar este array.
@@ -15,8 +17,8 @@ export const EQUIPE = [
   { nome: "Hugo Costa Reis", titulo: "Doutorando em Engenharia de Processos Químicos e Bioquímicos", descricao: "Avaliação de usabilidade e ergonomia dos protótipos em impressão 3D, estruturação logística para a execução das dinâmicas, co-moderação na aplicação dos materiais.", email: "hugo.reis@eq.frj.br", lattes: "http://lattes.cnpq.br/3500602218294576", foto: fotoHugoReis },
   { nome: "Ricardo Cunha Michel", titulo: "Professor Doutor em Química", descricao: "Apoio à concepção dos materiais, orientação quanto à correção dos conceitos químicos e normas Braille, produção de recursos e estratégias de aplicação e coleta de dados.", email: "michel@iq.ufrj.br", lattes: "http://lattes.cnpq.br/7631294110820860", foto: fotoRicardoMichel },
   { nome: "Pedro Faria Xavier", titulo: "Mestrando em Química", descricao: "Assistência técnica e pedagógica para implementação da tecnologia assistiva, impressão 3D e Modelagem dos materiais.", email: "pedrofariax@ima.ufrj.br", lattes: "http://lattes.cnpq.br/3367215215251168", foto: fotoPedroXavier },
-  { nome: "Maria Eduarda Gonçalves Carvalho", titulo: "Graduanda em Farmácia", descricao: "Co-mediação nas intervenções educacionais e suporte metodológico/criativo", email: "michel@iq.ufrj.br", lattes: "http://lattes.cnpq.br/6231303007289233", foto: fotoRicardoMichel },
-  { nome: "David Raphael Loureiro Fiocchi", titulo: "Graduando em Ciências da Matemáticas e da Terra", descricao: "Assistência técnica e desenvolvimento da plataforma do projeto, com foco na otimização e segurança do site.", email: "davidfiocchi.automacao@gmail.com", lattes: "http://lattes.cnpq.br/1124634173483610", foto: fotoPedroXavier }
+  { nome: "Maria Eduarda Gonçalves Carvalho", titulo: "Graduanda em Farmácia", descricao: "Co-mediação nas intervenções educacionais e suporte metodológico/criativo", email: "michel@iq.ufrj.br", lattes: "http://lattes.cnpq.br/6231303007289233", foto: fotoEduardaGoncalves },
+  { nome: "David Raphael Loureiro Fiocchi", titulo: "Graduando em Ciências da Matemáticas", descricao: "Assistência técnica e desenvolvimento da plataforma do projeto, com foco na otimização e segurança do site.", email: "davidfiocchi.automacao@gmail.com", lattes: "http://lattes.cnpq.br/1124634173483610", foto: fotoDavidFiocchi }
 
 ];
 
