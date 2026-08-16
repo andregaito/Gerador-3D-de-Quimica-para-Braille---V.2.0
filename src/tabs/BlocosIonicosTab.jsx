@@ -22,18 +22,26 @@ const BlocosIonicosTab = ({ theme, corPrincipal, setCorPrincipal, autoRotate, se
   return (
     <div id="painel-ionicos" role="tabpanel" aria-label="Blocos Iônicos" className="space-y-6 fade-in">
 
-      <div className="p-6 rounded-xl shadow-sm transition-colors duration-500" style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}>
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-          <div>
-            <h2 className="text-xl font-extrabold text-slate-900">Gerador Didático: Blocos Iônicos com Encaixes</h2>
-            <p className="text-slate-600 text-sm mt-1 text-justify">Crie seus proprios <strong>Bloquinhos Iônicos</strong> para ensinar diversos conceitos de química, como: Tipos de Ligações Químicas, Estequiometria/Balanceamento, Número de Oxidação (NOX) e Valência. Em que os <strong>Cátions</strong> possuem <strong>encaixes positivos (+)</strong> na extremidade direita, enquanto os <strong>Ânions possuem encaixes negativos (-)</strong> na sua extremidade esquerda que se conectam perfeitamente nos Cátions. A altura do bloco multiplica dependendo da valência (ex: bloco +2 tem o dobro da altura base).</p>
-          </div>
-          <div className="flex-shrink-0"><ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} /></div>
+      {/* Caixa do Cabeçalho - Agora com 'relative' para ancorar a paleta */}
+      <div className="relative p-6 rounded-xl shadow-sm transition-colors duration-500" style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}>
+        
+        {/* Ícone com posicionamento absoluto padronizado */}
+        <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10">
+          <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
         </div>
 
-        <div className="mt-4 p-3 bg-blue-50/80 border border-blue-200 rounded-lg text-xs text-blue-900 flex items-center gap-2 shadow-sm">
-          <Info className="w-5 h-5 text-blue-600 flex-shrink-0" />
-          <span><strong>Atenção a Formatação:</strong> Para que a fórmula química saia correta no bloco, digite ou cole utilizando números sobrescritos (⁺, ⁻, ¹, ², ³, ⁴, ⁵, ⁶) e subscritos (₁, ₂, ₃, ₄, ₅, ₆).. Exemplo: <strong>SO₄²⁻</strong> ou <strong>H⁺</strong>. O texto será centralizado e dimensionado de forma automática!.</span>
+        {/* Título e Texto com margem de segurança pr-[260px] e tamanhos aumentados (3xl / base) */}
+        <div className="pr-16 sm:pr-[140px]">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Gerador Didático: Blocos Iônicos com Encaixes</h2>
+          <p className="text-sm sm:text-base text-slate-600 mt-2 text-justify leading-relaxed">
+            Crie seus proprios <strong>Bloquinhos Iônicos</strong> para ensinar diversos conceitos de química, como: Tipos de Ligações Químicas, Estequiometria/Balanceamento, Número de Oxidação (NOX) e Valência. Em que os <strong>Cátions</strong> possuem <strong>encaixes positivos (+)</strong> na extremidade direita, enquanto os <strong>Ânions possuem encaixes negativos (-)</strong> na sua extremidade esquerda que se conectam perfeitamente nos Cátions. A altura do bloco multiplica dependendo da valência (ex: bloco +2 tem o dobro da altura base).
+          </p>
+        </div>
+
+        {/* Caixa de Atenção com espaçamento e texto ajustados para harmonizar com o novo cabeçalho */}
+        <div className="mt-6 p-4 bg-blue-50/80 border border-blue-200 rounded-lg text-xs sm:text-sm text-blue-900 flex items-center gap-3 shadow-sm">
+          <Info className="w-6 h-6 text-blue-600 flex-shrink-0" />
+          <span className="leading-relaxed"><strong>Atenção a Formatação:</strong> Para que a fórmula química saia correta no bloco, digite ou cole utilizando números sobrescritos (⁺, ⁻, ¹, ², ³, ⁴, ⁵, ⁶) e subscritos (₁, ₂, ₃, ₄, ₅, ₆).. Exemplo: <strong>SO₄²⁻</strong> ou <strong>H⁺</strong>. O texto será centralizado e dimensionado de forma automática!</span>
         </div>
       </div>
 
