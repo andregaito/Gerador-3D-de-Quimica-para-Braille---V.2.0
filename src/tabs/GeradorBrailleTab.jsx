@@ -19,27 +19,25 @@ const GeradorBrailleTab = ({ theme, corPrincipal, setCorPrincipal, autoRotate, s
   const handleDownload = () => {
     if (!stlUrl) return;
     const nomeStr = input.replace(/[^a-zA-Z0-9]/g, '_');
-     baixarModeloSTL(stlUrl, `MatrizBraille_${nomeStr}.stl`);
+    baixarModeloSTL(stlUrl, `MatrizBraille_${nomeStr}.stl`);
   };
 
   return (
     <div id="painel-gerador" role="tabpanel" aria-label="Gerador Braille" className="space-y-6 fade-in">
       
-      {/* PRIMEIRA CAIXA: Agora com 'relative' para ancorar o ícone */}
       <div className="relative p-6 rounded-xl shadow-sm transition-colors duration-500" style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}>
         
-        {/* Ícone com posicionamento absoluto padronizado */}
         <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10">
           <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
         </div>
 
         <div className="text-slate-600 space-y-3">
-          {/* Espaçamento pr-14 para o texto não sobrepor o ícone */}
-          <div className="pr-14">
+          <div className="pr-16 sm:pr-[260px]">   {/* Delimita um "Limite invisivel" para "quebra texto na proxima linha sem sobreposição com o icone da paleta de cores"*/}
             <p className="leading-relaxed text-justify">
               Converte fórmulas químicas em arquivos 3D (STL) para impressão 3D e leitura tátil, seguindo as normas estabelecidas pela <a href="https://www.gov.br/ibc/pt-br/pesquisa-e-tecnologia/materiais-especializados-1/livros-em-braille-1/o-sistema-braille-arquivos/grafia-quimica-braille-para-uso-no-brasil-pdf.pdf/@@display-file/file" target="_blank" rel="noopener noreferrer" className="font-semibold hover:underline transition-colors" style={{ color: theme.corPrincipal }}>Grafia Química Braille para Uso no Brasil (3ª edição, 2017)</a>.
             </p>
           </div>
+          
           <div className="border-l-4 pl-3 py-2 pr-3 rounded-r text-sm transition-colors" style={{ borderColor: theme.corPrincipal, backgroundColor: 'rgba(255,255,255,0.4)' }}>
             <p className="text-justify">Uma ferramenta de tecnologia assistiva desenvolvida por <a href="https://www.linkedin.com/in/andre-gaito-2a58151b1/" target="_blank" rel="noopener noreferrer" className="hover:underline cursor-pointer font-semibold text-slate-700">André Vinnicios S. Gaito</a> para facilitar a inclusão no ensino de ciências e tornar a química ao alcance de todos.</p>
           </div>
