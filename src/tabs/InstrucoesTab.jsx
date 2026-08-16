@@ -6,7 +6,7 @@ const InstrucoesTab = ({ theme, corPrincipal, setCorPrincipal }) => (
   <div id="painel-instrucoes" role="tabpanel" aria-label="Instruções de Uso" className="relative p-6 sm:p-10 rounded-xl shadow-sm transition-colors duration-500 text-left fade-in space-y-10" style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}>
     
     {/* Cabeçalho - A paleta agora vive DENTRO desta div para evitar o salto de margem do space-y-10 */}
-    <div className="border-b border-slate-200 pb-4 pr-16 sm:pr-[140px]">
+    <div className="border-b border-slate-200 pb-4 pr-16 sm:pr-[10px]">
       
       {/* Ícone com posicionamento absoluto padronizado */}
       <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10">
