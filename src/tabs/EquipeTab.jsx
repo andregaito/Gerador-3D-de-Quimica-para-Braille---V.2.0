@@ -14,7 +14,7 @@ const EquipeTab = ({ theme, corPrincipal, setCorPrincipal }) => (
       </div>
 
       {/* Margem de segurança para o texto não sobrepor a paleta */}
-      <div className="pr-16 sm:pr-[160px]">
+      <div className="pr-16 sm:pr-[0px]">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-left">Nossa Equipe</h2>
         <p className="text-slate-600 mt-2 text-justify">Conheça os pesquisadores, desenvolvedores e professores que tornam o projeto Química ao Alcance das Mãos possível.</p>
       </div>
