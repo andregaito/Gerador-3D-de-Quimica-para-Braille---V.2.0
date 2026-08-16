@@ -13,15 +13,16 @@ const BugTab = ({ theme, corPrincipal, setCorPrincipal }) => (
       <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
     </div>
 
+    {/* Ícone do Bug atualizado para acompanhar a paleta de cores e o tamanho (p-5, w-14 h-14) da aba Parcerias */}
     <div className="flex justify-center mb-6">
-      <div className="p-4 bg-red-100 rounded-full text-red-600" aria-hidden="true">
-        <Bug className="w-12 h-12" />
+      <div className="p-5 rounded-full shadow-inner transition-colors inline-block" style={{ backgroundColor: `${theme.corPrincipal}1A`, color: theme.corPrincipal }} aria-hidden="true">
+        <Bug className="w-14 h-14" />
       </div>
     </div>
     
     <h2 className="text-2xl font-bold text-slate-800 mb-4">Achou um Bug ou Tem uma Sugestão?</h2>
     
-    {/* AQUI ESTÁ A MÁGICA: max-w-4xl deixa o texto bem mais largo, mx-auto centraliza o bloco, e text-justify alinha as bordas do texto */}
+    {/* Texto principal mais largo e justificado */}
     <p className="text-slate-600 max-w-4xl mx-auto leading-relaxed mb-8 text-justify">
       O "Gerador 3D de Química para Braille" é um projeto de código aberto em constante evolução. Caso você encontre algum erro na geração dos caracteres, formatações inconsistentes, problemas na malha 3D ou qualquer outra falha técnica, por favor, nos avise! Suas sugestões de melhorias também são sempre bem-vindas, e essenciais para continuarmos aprimorando as ferramentas e funcionalidades do site.
     </p>
@@ -30,7 +31,8 @@ const BugTab = ({ theme, corPrincipal, setCorPrincipal }) => (
       <Mail className="w-5 h-5 mr-2" />Reportar para a Equipe
     </a>
     
-    <p className="mt-6 text-sm text-slate-500 max-w-4xl mx-auto">
+    {/* Texto de e-mail com text-justify para garantir que o início na esquerda seja IDÊNTICO ao parágrafo acima */}
+    <p className="mt-6 text-sm text-slate-500 max-w-4xl mx-auto text-justify">
       Ou envie um e-mail para: <strong>{BUG_EMAILS_DISPLAY}</strong>
     </p>
   </div>
