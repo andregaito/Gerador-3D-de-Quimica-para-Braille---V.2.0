@@ -40,7 +40,7 @@ import BugTab from './tabs/BugTab';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('gerador');
-  const [corPrincipal, setCorPrincipal] = useState('#0e52c2');
+  const [corPrincipal, setCorPrincipal] = useState('#511576');
   const theme = getTheme(corPrincipal);
 
   // Rotacao automatica do visualizador 3D: estado unico compartilhado entre
