@@ -18,9 +18,7 @@ const SaibaMaisTab = ({ theme, corPrincipal, setCorPrincipal }) => (
         </p>
       </div>
       {/* Container do ColorTester alinhado exatamente como no GeradorBrailleTab */}
-      <div className="flex-shrink-0 self-start">
-        <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
-      </div>
+      <div className="flex-shrink-0"><ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} /></div>
     </div>
 
     {/* Seção 1: Expansão */}
