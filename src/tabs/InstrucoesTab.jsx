@@ -3,15 +3,12 @@ import { imgSelecaoImpressora, imgMenuInicial, imgPreVisualizacao, imgMultiCor }
 import ColorTester from '../components/common/ColorTester';
 
 const InstrucoesTab = ({ theme, corPrincipal, setCorPrincipal }) => (
-  {/* 1. Adicionado 'relative' no contêiner principal */}
   <div id="painel-instrucoes" role="tabpanel" aria-label="Instruções de Uso" className="relative p-6 sm:p-10 rounded-xl shadow-sm transition-colors duration-500 text-left fade-in space-y-10" style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}>
     
-    {/* 2. Ícone ancorado de forma absoluta no canto (padrão para todas as abas) */}
     <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10">
       <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
     </div>
 
-    {/* 3. Cabeçalho com pr-14 (padding-right) para o texto não invadir o espaço do ícone */}
     <div className="border-b border-slate-200 pb-4 pr-14">
       <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Manual de Instruções</h2>
       <p className="text-sm sm:text-base text-slate-500 mt-1 text-justify">Veja como extrair o máximo potencial do gerador digital e realizar a impressão 3D das suas matrizes em Braille.</p>
