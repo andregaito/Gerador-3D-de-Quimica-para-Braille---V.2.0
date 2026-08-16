@@ -32,7 +32,7 @@ const GeradorBrailleTab = ({ theme, corPrincipal, setCorPrincipal, autoRotate, s
         </div>
 
         <div className="text-slate-600 space-y-3">
-          <div className="pr-16 sm:pr-[260px]">   {/* Delimita um "Limite invisivel" para "quebra texto na proxima linha sem sobreposição com o icone da paleta de cores"*/}
+          <div className="pr-16 sm:pr-[240px]">   {/* Delimita um "Limite invisivel" para "quebra texto na proxima linha sem sobreposição com o icone da paleta de cores"*/}
             <p className="leading-relaxed text-justify">
               Converte fórmulas químicas em arquivos 3D (STL) para impressão 3D e leitura tátil, seguindo as normas estabelecidas pela <a href="https://www.gov.br/ibc/pt-br/pesquisa-e-tecnologia/materiais-especializados-1/livros-em-braille-1/o-sistema-braille-arquivos/grafia-quimica-braille-para-uso-no-brasil-pdf.pdf/@@display-file/file" target="_blank" rel="noopener noreferrer" className="font-semibold hover:underline transition-colors" style={{ color: theme.corPrincipal }}>Grafia Química Braille para Uso no Brasil (3ª edição, 2017)</a>.
             </p>
