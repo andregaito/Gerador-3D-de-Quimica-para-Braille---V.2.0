@@ -1,12 +1,10 @@
-import { Settings, ArrowRight, Download, Box, Copy, Check, Grip, Languages, Trash2, Mic, MicOff, Volume2, Sliders, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
+import { Settings, ArrowRight, Download, Box, Copy, Check, Grip, Languages, Trash2, Mic, MicOff, Volume2, Sliders, ChevronDown, ChevronUp, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import ColorTester from '../components/common/ColorTester';
 import ConfigSlider from '../components/common/ConfigSlider';
 import AlertaSugestao from '../components/common/AlertaSugestao';
 import BrailleCell from '../components/common/BrailleCell';
 import StlViewer3D from '../components/common/StlViewer3D';
 import { baixarModeloSTL } from '../utils/downloadStl';
-import iconeRotacao from '../assets/icone-rotacao.svg';
-import { Settings, ArrowRight, Download, Box, Copy, Check, Grip, Languages, Trash2, Mic, MicOff, Volume2, Sliders, ChevronDown, ChevronUp, Eye, EyeOff, RefreshCw } from 'lucide-react';
 
 const GeradorBrailleTab = ({ theme, corPrincipal, setCorPrincipal, autoRotate, setAutoRotate, gerador }) => {
   const {
@@ -100,7 +98,7 @@ const GeradorBrailleTab = ({ theme, corPrincipal, setCorPrincipal, autoRotate, s
                 {mostrarDimensoesGerador ? <><EyeOff className="w-3.5 h-3.5" /> Ocultar Dimensões</> : <><Eye className="w-3.5 h-3.5" /> Mostrar Dimensões</>}
               </button>
 
-              {/* NOVO BOTÃO DE ROTAÇÃO COM A MÁSCARA SVG */}
+              {/* Botão de rotação limpo usando o ícone RefreshCw do lucide-react */}
               <button onClick={() => setAutoRotate(!autoRotate)} className="flex items-center gap-1.5 px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-xs font-semibold border border-slate-200 transition-colors">
                 <RefreshCw className={`w-3.5 h-3.5 ${autoRotate ? 'animate-spin' : ''}`} style={{ color: theme.corPrincipal }} />
                 {autoRotate ? 'Parar Rotação' : 'Girar Peça'}
