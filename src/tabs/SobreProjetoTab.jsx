@@ -3,15 +3,19 @@ import ColorTester from '../components/common/ColorTester';
 const SobreProjetoTab = ({ theme, corPrincipal, setCorPrincipal }) => (
   <div id="painel-sobre" role="tabpanel" aria-label="Sobre o Projeto" className="relative p-8 sm:p-12 rounded-xl shadow-sm transition-colors duration-500 text-slate-700 fade-in space-y-8 text-left" style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}>
     
-    {/* Ícone com posicionamento absoluto padronizado */}
-    <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10">
-      <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
-    </div>
+    {/* Cabeçalho - O ícone da paleta agora vive AQUI DENTRO para não quebrar a margem superior */}
+    <div className="border-b border-slate-200 pb-6">
+      
+      {/* Ícone com posicionamento absoluto padronizado */}
+      <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10">
+        <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
+      </div>
 
-    {/* Cabeçalho com o recuo de segurança (pr-[260px]) para o texto não sobrepor a paleta */}
-    <div className="border-b border-slate-200 pb-6 pr-16 sm:pr-[260px]">
-      <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Química ao Alcance das Mãos</h2>
-      <p className="text-lg font-medium mt-2 transition-colors text-justify" style={{ color: theme.corPrincipal }}>Democratizando o ensino de ciências através da tecnologia e da manufatura aditiva.</p>
+      {/* Margem de segurança reduzida para 140px: impede a sobreposição do ícone sem quebrar a frase em duas linhas */}
+      <div className="pr-16 sm:pr-[140px]">
+        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Química ao Alcance das Mãos</h2>
+        <p className="text-lg font-medium mt-2 transition-colors text-justify" style={{ color: theme.corPrincipal }}>Democratizando o ensino de ciências através da tecnologia e da manufatura aditiva.</p>
+      </div>
     </div>
     
     <div className="space-y-4">
