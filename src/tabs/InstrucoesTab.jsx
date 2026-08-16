@@ -1,11 +1,21 @@
 import { Settings, ArrowRight, Box, Copy, Languages, Sliders, Download } from 'lucide-react';
 import { imgSelecaoImpressora, imgMenuInicial, imgPreVisualizacao, imgMultiCor } from '../data/assets';
+import ColorTester from '../components/common/ColorTester';
 
-const InstrucoesTab = ({ theme }) => (
+const InstrucoesTab = ({ theme, corPrincipal, setCorPrincipal }) => (
   <div id="painel-instrucoes" role="tabpanel" aria-label="Instruções de Uso" className="p-6 sm:p-10 rounded-xl shadow-sm transition-colors duration-500 text-left fade-in space-y-10" style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}>
+    
+    {/* Cabeçalho atualizado com o ColorTester na mesma posição */}
     <div className="border-b border-slate-200 pb-4">
-      <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Manual de Instruções</h2>
-      <p className="text-sm sm:text-base text-slate-500 mt-1 text-justify">Veja como extrair o máximo potencial do gerador digital e realizar a impressão 3D das suas matrizes em Braille.</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+        <div className="flex-1 pr-2">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Manual de Instruções</h2>
+          <p className="text-sm sm:text-base text-slate-500 mt-1 text-justify">Veja como extrair o máximo potencial do gerador digital e realizar a impressão 3D das suas matrizes em Braille.</p>
+        </div>
+        <div className="flex-shrink-0 self-start">
+          <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
+        </div>
+      </div>
     </div>
 
     <div className="space-y-4">
