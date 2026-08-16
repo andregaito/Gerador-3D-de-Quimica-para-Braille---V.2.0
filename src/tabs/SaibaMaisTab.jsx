@@ -6,19 +6,25 @@ const SaibaMaisTab = ({ theme, corPrincipal, setCorPrincipal }) => (
     id="painel-saiba-mais" 
     role="tabpanel" 
     aria-label="Saiba Mais" 
-    className="p-8 sm:p-12 rounded-xl shadow-sm transition-colors duration-500 text-slate-700 fade-in space-y-8 text-left"
+    className="relative p-8 sm:p-12 rounded-xl shadow-sm transition-colors duration-500 text-slate-700 fade-in space-y-8 text-left"
     style={{ backgroundColor: theme.fundoCaixa, border: `2px solid ${theme.bordaGeral}` }}
   >
-    {/* Cabeçalho da Aba */}
-    <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-slate-200 pb-6">
-      <div className="flex-1">
+    
+    {/* Cabeçalho da Aba - A paleta fica aqui dentro para não pular a margem */}
+    <div className="border-b border-slate-200 pb-6">
+      
+      {/* Ícone com posicionamento absoluto padronizado */}
+      <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10">
+        <ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} />
+      </div>
+
+      {/* Recuo de segurança de 140px para não bater no ícone, mantendo a frase em 1 linha */}
+      <div className="pr-16 sm:pr-[1px]">
         <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Novidades e Próximos Passos</h2>
-        <p className="text-lg font-medium mt-2 transition-colors text-justify pr-2" style={{ color: theme.corPrincipal }}>
+        <p className="text-lg font-medium mt-2 transition-colors text-justify" style={{ color: theme.corPrincipal }}>
           Acompanhe o desenvolvimento contínuo, nossas pesquisas e redes de colaboração institucional.
         </p>
       </div>
-      {/* Container do ColorTester alinhado exatamente como no GeradorBrailleTab */}
-      <div className="flex-shrink-0"><ColorTester corPrincipal={corPrincipal} setCorPrincipal={setCorPrincipal} /></div>
     </div>
 
     {/* Seção 1: Expansão */}
