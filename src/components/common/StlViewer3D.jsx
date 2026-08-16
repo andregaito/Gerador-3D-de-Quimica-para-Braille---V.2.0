@@ -3,12 +3,11 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Bounds, Environment } from '@react-three/drei';
 import StlModel from './StlModel';
 import DimensionsOverlay from './DimensionsOverlay';
-import { iconeRotacao } from '../../data/assets';
+import iconeRotacao from '../../assets/icone-rotacao.svg';
 
 /**
- * Visualizador 3D interativo compartilhado pelas abas "Gerador Braille" e
- * "Blocos Iônicos": renderiza o STL, o overlay de dimensões e o botão de
- * auto-rotação, com câmera/altura configuráveis por peça.
+ * Visualizador 3D interativo compartilhado pelas abas "Gerador Braille" e "Blocos Iônicos":
+ * renderiza o STL, o overlay de dimensões e o botão de auto-rotação, com câmera/altura configuráveis por peça.
  */
 const StlViewer3D = ({
   url, cor, dimensions, onDimensionsParsed, mostrarDimensoes, onToggleDimensoes,
@@ -24,8 +23,30 @@ const StlViewer3D = ({
     >
       <DimensionsOverlay dimensions={dimensions} isVisible={mostrarDimensoes} />
 
-      <button onClick={onToggleAutoRotate} className="absolute top-4 right-4 z-10 p-1 rounded-full shadow-lg transition-all" style={autoRotate ? { backgroundColor: cor, border: `2px solid ${cor}` } : { backgroundColor: 'rgba(51, 65, 85, 0.8)' }}>
-        <img src={iconeRotacao} alt="" className="w-12 h-12 rounded-full object-cover" />
+      {/* Botão de rotação atualizado com a máscara SVG */}
+      <button 
+        onClick={onToggleAutoRotate} 
+        className="absolute top-4 right-4 z-10 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-105" 
+        style={{ 
+          backgroundColor: autoRotate ? cor : 'rgba(15, 23, 42, 0.6)', // Cor preenchida se ativo, escuro se inativo
+          border: `2px solid ${cor}` 
+        }}
+        title={autoRotate ? "Parar rotação" : "Iniciar rotação"}
+      >
+        <div 
+          className={`w-9 h-9 transition-all duration-500 ${autoRotate ? 'animate-spin' : ''}`}
+          style={{ 
+            backgroundColor: autoRotate ? '#ffffff' : cor, // Ícone branco se ativo, pintado com a paleta se inativo
+            maskImage: `url(${iconeRotacao})`, 
+            WebkitMaskImage: `url(${iconeRotacao})`,
+            maskSize: 'contain',
+            WebkitMaskSize: 'contain',
+            maskRepeat: 'no-repeat',
+            WebkitMaskRepeat: 'no-repeat',
+            maskPosition: 'center',
+            WebkitMaskPosition: 'center'
+          }} 
+        />
       </button>
 
       <Canvas shadows camera={{ position: cameraPosition, fov: 45 }}>
