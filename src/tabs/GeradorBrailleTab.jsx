@@ -1,17 +1,18 @@
-import { Settings, ArrowRight, Download, Box, Copy, Check, Grip, Languages, Trash2, Mic, MicOff, Volume2, Sliders, ChevronDown, ChevronUp, Eye, EyeOff, RefreshCw } from 'lucide-react';
+import { Settings, ArrowRight, Download, Box, Copy, Check, Grip, Languages, Trash2, Mic, MicOff, Volume2, Sliders, ChevronDown, ChevronUp, Eye, EyeOff, RefreshCw, Type } from 'lucide-react';
 import ColorTester from '../components/common/ColorTester';
 import ConfigSlider from '../components/common/ConfigSlider';
 import AlertaSugestao from '../components/common/AlertaSugestao';
 import BrailleCell from '../components/common/BrailleCell';
 import StlViewer3D from '../components/common/StlViewer3D';
 import { baixarModeloSTL } from '../utils/downloadStl';
+import { FONTES_TEXTO_3D } from '../data/fontes';
 
 const GeradorBrailleTab = ({ theme, corPrincipal, setCorPrincipal, autoRotate, setAutoRotate, gerador }) => {
   const {
     input, setInput, cells, isGenerating, stlUrl,
     dimensoesGerador, setDimensoesGerador, mostrarDimensoesGerador, setMostrarDimensoesGerador,
     copiado, brailleInput, translatedText, isListening, showAdvanced, setShowAdvanced,
-    config3D, setConfig3D, sugestaoQuimica, handleAplicarSugestao, handleGenerate,
+    config3D, setConfig3D, configTextoVerso, setConfigTextoVerso, sugestaoQuimica, handleAplicarSugestao, handleGenerate,
     brailleUnicodeText, handleCopy, handleBrailleTranslate, handleClearTranslator,
     handleDictation, handleSpeak, celasFisicas
   } = gerador;
@@ -81,6 +82,38 @@ const GeradorBrailleTab = ({ theme, corPrincipal, setCorPrincipal, autoRotate, s
               </div>
             )}
           </div>
+
+          {/* NOVO BLOCO REINTEGRADO V 2.8: TEXTO NO VERSO DA PLACA */}
+          <div className="border-t border-slate-200 pt-4 mt-2">
+            <label className="flex items-center gap-2 cursor-pointer w-fit">
+              <input type="checkbox" checked={configTextoVerso.ativo} onChange={(e) => setConfigTextoVerso({ ...configTextoVerso, ativo: e.target.checked })} className="w-5 h-5 rounded cursor-pointer" style={{ accentColor: theme.corPrincipal }} />
+              <span className="text-sm font-semibold flex items-center gap-1.5" style={{ color: theme.corPrincipal }}><Type className="w-4 h-4" /> Texto em Relevo no Verso</span>
+            </label>
+            <p className="text-xs text-slate-500 mt-1.5 text-justify">Grava a mesma fórmula/texto digitado em letras comuns na parte de trás da peça, tornando-a legível tanto para pessoas cegas (Braille na frente) quanto para pessoas videntes (texto no verso).</p>
+
+            {configTextoVerso.ativo && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4 bg-slate-50/50 p-5 rounded-lg border border-slate-200">
+                <div>
+                  <ConfigSlider label="Altura do Relevo" value={configTextoVerso.espessura} min="-2.0" max="2.0" step="0.05" unit="mm" onChange={(e) => setConfigTextoVerso({ ...configTextoVerso, espessura: parseFloat(e.target.value) })} cor={configTextoVerso.espessura < 0 ? '#dc2626' : theme.corPrincipal} />
+                  <span className="text-xs text-slate-500 block mt-1.5 text-justify">
+                    {configTextoVerso.espessura < 0 ? 'Valores negativos: O texto será gerado como uma marcação negativa "para dentro da peça".' : 'Valores Positivos: O texto será gerado como um "Relevo" para fora da peça.'}
+                  </span>
+                </div>
+                <div>
+                  <ConfigSlider label="Tamanho do Texto" value={configTextoVerso.tamanho} min="3.0" max="40.0" step="0.5" unit="mm" onChange={(e) => setConfigTextoVerso({ ...configTextoVerso, tamanho: parseFloat(e.target.value) })} cor={theme.corPrincipal} />
+                  <span className="text-xs text-slate-500 block mt-1.5 text-justify">Referente à altura das letras. O texto é centralizado e reduzido automaticamente se não couber na placa.</span>
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-600 uppercase mb-1">Fonte do Texto</label>
+                  <select value={configTextoVerso.fonte} onChange={(e) => setConfigTextoVerso({ ...configTextoVerso, fonte: e.target.value })} className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 outline-none font-medium text-sm bg-white cursor-pointer">
+                    {FONTES_TEXTO_3D.map(f => <option key={f.id} value={f.id}>{f.label}</option>)}
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
+          {/* FIM DO BLOCO TEXTO NO VERSO */}
+          
         </form>
       </div>
 
@@ -159,7 +192,6 @@ const GeradorBrailleTab = ({ theme, corPrincipal, setCorPrincipal, autoRotate, s
                   <span className="flex items-center text-[11px] sm:text-xs font-bold text-slate-500 uppercase"><Grip className="w-4 h-4 mr-1 sm:mr-1.5 text-slate-400" />Digite o texto Braille</span>
                   <button onClick={handleClearTranslator} className="px-2 py-1 bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-700 rounded text-[10px] sm:text-xs font-bold flex items-center transition-colors"><Trash2 className="w-3 h-3 mr-1" />Limpar</button>
                 </div>
-                {/* Aqui a fonte mudou de text-2xl para text-lg */}
                 <textarea value={brailleInput} onChange={(e) => handleBrailleTranslate(e.target.value)} className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-400 outline-none text-lg font-mono mb-4 resize-y min-h-[4rem] transition-colors duration-500 text-justify" style={{ backgroundColor: theme.fundoSubCaixa, color: theme.textoSubCaixa }} placeholder="Cole caracteres Braille aqui..." />
                 <div className="flex items-center justify-between mb-2">
                   <span className="flex items-center text-xs font-bold text-slate-500 uppercase"><Languages className="w-4 h-4 mr-1.5 transition-colors" style={{ color: theme.corPrincipal }} />Tradução em Português</span>
@@ -168,7 +200,6 @@ const GeradorBrailleTab = ({ theme, corPrincipal, setCorPrincipal, autoRotate, s
                     <button onClick={handleSpeak} disabled={!translatedText} className="px-2 py-1 rounded text-[10px] sm:text-xs font-bold flex items-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed" style={{ backgroundColor: `${theme.corPrincipal}20`, color: theme.corPrincipal }}><Volume2 className="w-3 h-3 mr-1" />Ouvir</button>
                   </div>
                 </div>
-                {/* Aqui adicionei a classe break-all e o tamanho da fonte ficou unificado em text-lg */}
                 <div className="w-full px-3 py-2 border border-slate-300 rounded-md text-lg min-h-[3.5rem] font-sans whitespace-pre-wrap break-all transition-colors duration-500 flex-grow text-justify" style={{ backgroundColor: theme.fundoSubCaixa, color: theme.textoSubCaixa }}>
                   {translatedText || <span className="text-slate-400 italic">A tradução aparecerá aqui...</span>}
                 </div>
