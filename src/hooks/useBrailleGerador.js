@@ -10,9 +10,8 @@ const CONFIG_3D_PADRAO = {
 };
 
 /**
- * Encapsula todo o estado e as ações da aba "Gerador Braille":
- * digitação/reconhecimento de fórmulas, geração da malha 3D, tradutor
- * reverso Braille -> português e leitura por voz.
+ * Encapsula todo o estado e as ações da aba "Gerador Braille": digitação/reconhecimento de fórmulas,
+ * geração da malha 3D, tradutor reverso Braille -> português e leitura por voz.
  */
 export const useBrailleGerador = () => {
   const [input, setInput] = useState('Fe(OH)2');
@@ -29,6 +28,14 @@ export const useBrailleGerador = () => {
   const [isListening, setIsListening] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [config3D, setConfig3D] = useState(CONFIG_3D_PADRAO);
+
+  // Estado para a configuração do Texto no Verso adicionado
+  const [configTextoVerso, setConfigTextoVerso] = useState({
+    ativo: false,
+    espessura: 0.6,
+    tamanho: 10.0,
+    fonte: 'sans'
+  });
 
   const sugestaoQuimica = checarSugestaoQuimica(input);
 
@@ -116,7 +123,12 @@ export const useBrailleGerador = () => {
     input, setInput: handleInputChange, cells, isGenerating, stlUrl,
     dimensoesGerador, setDimensoesGerador, mostrarDimensoesGerador, setMostrarDimensoesGerador,
     copiado, brailleInput, translatedText, isListening, showAdvanced, setShowAdvanced,
-    config3D, setConfig3D, sugestaoQuimica, handleAplicarSugestao, handleGenerate,
+    config3D, setConfig3D, 
+    
+    // Adição da variavel de Texto no Verso para a interface da Aba ler e modificar (deve fazer o site voltar ao ar)
+    configTextoVerso, setConfigTextoVerso, 
+    
+    sugestaoQuimica, handleAplicarSugestao, handleGenerate,
     brailleUnicodeText, handleCopy, handleBrailleTranslate, handleClearTranslator,
     handleDictation, handleSpeak, celasFisicas
   };
