@@ -7,16 +7,29 @@ const ColorTester = ({ corPrincipal, setCorPrincipal }) => {
   const [isRainbowMode, setIsRainbowMode] = useState(false);
   const isRoxo = corPrincipal === '#511576' && !isRainbowMode;
 
-  // Lógica do Efeito Arco-Íris (RGB Gamer)
+  // Lógica do Efeito Arco-Íris (RGB Gamer Dinâmico)
   useEffect(() => {
     let interval;
     if (isRainbowMode) {
-      const rainbowHexes = ['#dc2626', '#ea580c', '#ca8a04', '#1a8441', '#06b6d4', '#0e52c2', '#a855f7', '#db2777'];
-      let i = 0;
+      let hue = 0; // Começa no grau 0 (Vermelho)
+      
+      // Função matemática que converte o grau da roda HSL para código Hexadecimal
+      const hslToHex = (h, s, l) => {
+        l /= 100;
+        const a = s * Math.min(l, 1 - l) / 100;
+        const f = n => {
+          const k = (n + h / 30) % 12;
+          const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+          return Math.round(255 * color).toString(16).padStart(2, '0');
+        };
+        return `#${f(0)}${f(8)}${f(4)}`;
+      };
+
+      // Roda a cada 800ms para criar uma transição contínua junto com o CSS duration-500
       interval = setInterval(() => {
-        setCorPrincipal(rainbowHexes[i]);
-        i = (i + 1) % rainbowHexes.length;
-      }, 1000); // Muda a cor a cada 2.5 segundos de forma contínua
+        hue = (hue + 20) % 360; // Avança 20 graus continuamente pela roda de cores
+        setCorPrincipal(hslToHex(hue, 100, 50)); // Mantém as cores vibrantes (Sat 100%, Lum 50%)
+      }, 800); 
     }
     return () => clearInterval(interval);
   }, [isRainbowMode, setCorPrincipal]);
