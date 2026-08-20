@@ -1,5 +1,10 @@
 import { useState } from 'react';
 
+// === ADIÇÕES DO VERCEL ANALYTICS ===
+import { Analytics } from '@vercel/analytics/react';
+import { track } from '@vercel/analytics';
+// ===================================
+
 import { getTheme } from './data/theme';
 import { useBrailleGerador } from './hooks/useBrailleGerador';
 import { useBlocoIonico } from './hooks/useBlocoIonico';
@@ -53,6 +58,13 @@ export default function App() {
   const gerador = useBrailleGerador();
   const ionico = useBlocoIonico(corPrincipal);
 
+  // === NOVA FUNÇÃO PARA RASTREAR A TROCA DE ABAS ===
+  const handleTrocarAba = (novaAba) => {
+    setActiveTab(novaAba); // Muda a aba visualmente
+    track('Acesso_Aba', { nome_da_aba: novaAba }); // Envia o dado silenciosamente para a Vercel
+  };
+  // =================================================
+
   const renderConteudoAba = () => {
     switch (activeTab) {
       case 'gerador':
@@ -95,13 +107,18 @@ export default function App() {
   return (
     <div className="flex flex-col min-h-screen font-sans text-slate-800 transition-colors duration-500" style={{ backgroundColor: theme.fundoPrincipal }}>
       <Header theme={theme} />
-      <Navigation activeTab={activeTab} setActiveTab={setActiveTab} theme={theme} />
+      
+      {/* Aqui substituímos setActiveTab por handleTrocarAba */}
+      <Navigation activeTab={activeTab} setActiveTab={handleTrocarAba} theme={theme} />
 
       <main className="flex-grow p-4 sm:p-6 w-full max-w-5xl mx-auto">
         {renderConteudoAba()}
       </main>
 
       <Footer theme={theme} />
+      
+      {/* === COMPONENTE ANALYTICS INJETADO AQUI === */}
+      <Analytics />
     </div>
   );
 }
