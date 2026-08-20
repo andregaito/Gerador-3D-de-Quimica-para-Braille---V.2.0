@@ -16,7 +16,7 @@ const ColorTester = ({ corPrincipal, setCorPrincipal }) => {
       interval = setInterval(() => {
         setCorPrincipal(rainbowHexes[i]);
         i = (i + 1) % rainbowHexes.length;
-      }, 2500); // Muda a cor a cada 2.5 segundos de forma contínua
+      }, 1000); // Muda a cor a cada 2.5 segundos de forma contínua
     }
     return () => clearInterval(interval);
   }, [isRainbowMode, setCorPrincipal]);
